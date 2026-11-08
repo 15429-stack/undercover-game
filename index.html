@@ -1,1 +1,292 @@
 
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNDERCOVER</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:#edf3ff;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{background:#101a2c;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #263753;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:900;letter-spacing:4px;color:#55c7ff}
+.logo span{color:white}
+.small{font-size:12px;color:#9aabc5}
+.container{max-width:1200px;margin:auto;padding:22px}
+.hero{background:linear-gradient(120deg,#142b4b,#10182a 65%,#193c54);border:1px solid #315274;border-radius:18px;padding:35px;margin:15px 0 25px}
+.hero h1{font-size:42px;margin:0 0 10px;letter-spacing:5px}
+.hero p{color:#b5c8df;line-height:1.6}
+button.primary{background:#42bdf5;color:#061321;border:0;padding:13px 22px;border-radius:8px;font-weight:bold}
+button.secondary{background:#1b2a42;color:white;border:1px solid #3a5376;padding:11px 16px;border-radius:8px}
+button:disabled{opacity:.5;cursor:not-allowed}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+nav button{background:#142137;color:#b9c9df;border:1px solid #293d5b;border-radius:8px;padding:11px 14px}
+nav button.active{background:#234d70;color:white;border-color:#55c7ff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:#111c2e;border:1px solid #263b59;border-radius:13px;padding:18px;margin-bottom:14px}
+.card h3{margin-top:0}
+.card p{color:#aebdd2;line-height:1.55}
+.stat{font-size:25px;font-weight:bold;color:#5bcaff}
+.tag{display:inline-block;background:#1e3855;color:#82d6ff;border-radius:5px;padding:5px 8px;font-size:11px;margin:3px}
+.hidden{display:none!important}
+input{background:#0a1424;color:white;border:1px solid #405675;padding:12px;border-radius:7px;width:100%;margin:8px 0}
+.choice{display:block;width:100%;text-align:left;background:#192941;color:white;border:1px solid #344e70;border-radius:8px;padding:13px;margin:9px 0}
+.choice:hover{border-color:#55c7ff;background:#213a59}
+.mission{display:flex;justify-content:space-between;gap:10px;align-items:center}
+hr{border:0;border-top:1px solid #293b55;margin:18px 0}
+footer{text-align:center;color:#71839d;padding:35px;font-size:12px}
+#notice{position:fixed;bottom:18px;right:18px;background:#173b56;border:1px solid #54c7ff;padding:14px 18px;border-radius:9px;display:none;z-index:10}
+@media(max-width:600px){.hero h1{font-size:30px}header{padding:14px}.container{padding:14px}.mission{display:block}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">UNDER<span>COVER</span></div>
+  <div class="small">INTERNATIONAL INVESTIGATION AGENCY</div>
+</header>
+
+<div class="container">
+<section id="start">
+  <div class="hero">
+    <span class="tag">CLASSIFIED • TOP SECRET</span>
+    <h1>WELCOME TO<br>UNDERCOVER</h1>
+    <p>De wereld zit vol geheimen. Er verdwijnen mensen, mysterieuze berichten verschijnen en internationale organisaties verbergen informatie.</p>
+    <p>Jij wordt de nieuwste internationale detective. Onderzoek zaken, verzamel aanwijzingen en ontdek wat er werkelijk gebeurt.</p>
+    <input id="playerName" maxlength="20" placeholder="Kies je detective-naam">
+    <button class="primary" onclick="startGame()">START GAME →</button>
+    <p class="small">Made by Kai Segers</p>
+  </div>
+</section>
+
+<section id="game" class="hidden">
+  <div class="grid">
+    <div class="card"><div class="small">DETECTIVE</div><div id="nameStat" class="stat">Agent</div></div>
+    <div class="card"><div class="small">RANG</div><div id="rankStat" class="stat">Beginner</div></div>
+    <div class="card"><div class="small">XP</div><div id="xpStat" class="stat">0</div></div>
+    <div class="card"><div class="small">CREDITS</div><div id="moneyStat" class="stat">500</div></div>
+  </div>
+
+  <nav id="navigation">
+    <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+    <button onclick="showPage('missions',this)">Missies</button>
+    <button onclick="showPage('map',this)">Wereldkaart</button>
+    <button onclick="showPage('messages',this)">Berichten</button>
+    <button onclick="showPage('dossiers',this)">Dossiers</button>
+    <button onclick="showPage('hq',this)">Hoofdkantoor</button>
+    <button onclick="showPage('outfits',this)">Outfits</button>
+    <button onclick="showPage('rewards',this)">Beloningen</button>
+    <button onclick="showPage('settings',this)">Instellingen</button>
+  </nav>
+
+  <main id="dashboard" class="page">
+    <div class="hero">
+      <span class="tag">AGENCY ONLINE</span>
+      <h1>GOEDEMORGEN, AGENT.</h1>
+      <p>Er is een nieuw geheim dossier binnengekomen. Een onbekend persoon heeft contact gezocht met jouw organisatie.</p>
+      <button class="primary" onclick="showPage('missions')">BEKIJK MISSIES →</button>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>📁 Actieve zaak</h3><p>THE MISSING SIGNAL</p><span class="tag">NEW CASE</span></div>
+      <div class="card"><h3>📡 Communicatie</h3><p>Je hebt een nieuw bericht ontvangen.</p><button class="secondary" onclick="showPage('messages')">Open berichten</button></div>
+      <div class="card"><h3>🌍 Wereldwijd</h3><p>Je organisatie kan zaken onderzoeken in verschillende landen.</p><button class="secondary" onclick="showPage('map')">Open wereldkaart</button></div>
+    </div>
+  </main>
+
+  <main id="missions" class="page hidden">
+    <div class="hero"><h1>MISSIES</h1><p>Kies een zaak en ontdek wat er aan de hand is.</p></div>
+    <div id="missionList"></div>
+  </main>
+
+  <main id="map" class="page hidden">
+    <div class="hero"><h1>WERELDKAART</h1><p>Jouw organisatie onderzoekt zaken over de hele wereld.</p></div>
+    <div class="grid">
+      <div class="card"><h3>🇺🇸 NEW YORK</h3><p>Een onbekend signaal is opgevangen.</p><span class="tag">NOORD-AMERIKA</span></div>
+      <div class="card"><h3>🇬🇧 LONDON</h3><p>Een geheim dossier wacht op onderzoek.</p><span class="tag">EUROPA</span></div>
+      <div class="card"><h3>🇯🇵 TOKYO</h3><p>Een mysterieuze organisatie is ontdekt.</p><span class="tag">AZIË</span></div>
+      <div class="card"><h3>🇳🇱 AMSTERDAM</h3><p>Een onbekende contactpersoon wil praten.</p><span class="tag">EUROPA</span></div>
+      <div class="card"><h3>🇫🇷 PARIS</h3><p>Een waardevol kunstwerk is verdwenen.</p><span class="tag">EUROPA</span></div>
+      <div class="card"><h3>🇪🇬 CAÏRO</h3><p>Een oud geheim wordt opnieuw onderzocht.</p><span class="tag">AFRIKA</span></div>
+    </div>
+  </main>
+
+  <main id="messages" class="page hidden">
+    <div class="hero"><h1>BERICHTEN</h1><p>Contact met je team en andere personages.</p></div>
+    <div class="card">
+      <h3>📱 Onbekend nummer</h3>
+      <p id="chatText">Hallo agent. Ik heb informatie over THE MISSING SIGNAL. Je moet voorzichtig zijn. — Unknown</p>
+      <input id="messageInput" placeholder="Typ een bericht...">
+      <button class="primary" onclick="sendMessage()">VERSTUUR</button>
+      <div id="chatReplies"></div>
+    </div>
+    <div class="card"><h3>👤 Teamleider Alex</h3><p>Welkom bij de organisatie. Ik houd je op de hoogte van nieuwe zaken.</p></div>
+  </main>
+
+  <main id="dossiers" class="page hidden">
+    <div class="hero"><h1>DOSSIERS</h1><p>Alle verzamelde informatie over jouw onderzoeken.</p></div>
+    <div class="card"><h3>📁 THE MISSING SIGNAL</h3><p>Status: onderzoek geopend.</p><p>Locatie: New York.</p><p>Informatie: een onbekend signaal is ontvangen. De afzender is nog niet bekend.</p></div>
+    <div class="card"><h3>📁 THE UNKNOWN FILE</h3><p>Status: nog niet onderzocht.</p><p>Locatie: London.</p></div>
+    <div class="card"><h3>📁 TOKYO CONNECTION</h3><p>Status: nog niet onderzocht.</p><p>Locatie: Tokyo.</p></div>
+    <div class="card"><h3>📁 CASE BOARD</h3><p>Jouw aanwijzingen worden hier verzameld. Voltooi missies om meer informatie vrij te spelen.</p></div>
+  </main>
+
+  <main id="hq" class="page hidden">
+    <div class="hero"><h1>HOOFDKWARTIER</h1><p>Welkom op de centrale basis van jouw internationale organisatie.</p></div>
+    <div class="grid">
+      <div class="card"><h3>🏢 Hoofdkantoor</h3><p>Je eigen organisatie heeft een kantoor in het centrum van de stad.</p></div>
+      <div class="card"><h3>👥 Personeel</h3><p>Alex — Teamleider</p><p>Sam — Analist</p><p>Jordan — Onderzoeker</p></div>
+      <div class="card"><h3>🖥️ Controlekamer</h3><p>Alle meldingen en onderzoeksrapporten komen hier binnen.</p></div>
+      <div class="card"><h3>📈 Upgrade</h3><p>Verbeter je hoofdkantoor voor 250 credits.</p><button class="secondary" onclick="upgradeHQ()">Upgrade kopen</button><p id="hqStatus">Huidig niveau: 1</p></div>
+    </div>
+  </main>
+
+  <main id="outfits" class="page hidden">
+    <div class="hero"><h1>OUTFITS</h1><p>Kies een outfit voor jouw detective.</p></div>
+    <div class="grid">
+      <div class="card"><h3>🕵️ Klassieke detective</h3><p>Gratis standaardoutfit.</p><button class="secondary" onclick="chooseOutfit('Klassieke detective')">Kiezen</button></div>
+      <div class="card"><h3>🧥 Internationale agent</h3><p>Prijs: 150 credits.</p><button class="secondary" onclick="buyOutfit('Internationale agent',150)">Kopen</button></div>
+      <div class="card"><h3>🎩 Speciale onderzoeker</h3><p>Prijs: 300 credits.</p><button class="secondary" onclick="buyOutfit('Speciale onderzoeker',300)">Kopen</button></div>
+    </div>
+    <p id="outfitStatus">Huidige outfit: Klassieke detective</p>
+  </main>
+
+  <main id="rewards" class="page hidden">
+    <div class="hero"><h1>BELONINGEN</h1><p>Verdien XP, credits en nieuwe rangen.</p></div>
+    <div class="card"><h3>🎁 Dagelijkse beloning</h3><p>Ontvang 100 credits. Je kunt dit één keer per dag ophalen.</p><button class="primary" onclick="dailyReward()">CLAIM BELONING</button></div>
+    <div class="card"><h3>🏆 Rangen</h3><p>Beginner → Junior Investigator → Professional Investigator → Senior Investigator → Elite Investigator → Legend.</p></div>
+    <div class="card"><h3>⭐ Prestaties</h3><p id="achievement">Voltooi je eerste missie om je eerste prestatie te verdienen.</p></div>
+  </main>
+
+  <main id="settings" class="page hidden">
+    <div class="hero"><h1>INSTELLINGEN</h1><p>Beheer je spelvoortgang.</p></div>
+    <div class="card"><h3>💾 Opslaan</h3><p>Je voortgang wordt automatisch in deze browser opgeslagen.</p><button class="secondary" onclick="saveGame()">NU OPSLAAN</button></div>
+    <div class="card"><h3>📤 Bewaar je voortgang</h3><button class="secondary" onclick="exportSave()">Download savebestand</button></div>
+    <div class="card"><h3>🔄 Opnieuw beginnen</h3><p>Let op: hiermee wordt je opgeslagen spel gewist.</p><button class="secondary" onclick="resetGame()">Reset spel</button></div>
+    <p class="small">UNDERCOVER • Made by Kai Segers • Versie 1.0</p>
+  </main>
+</section>
+</div>
+
+<footer>UNDERCOVER INTERNATIONAL AGENCY · MADE BY KAI SEGERS</footer>
+<div id="notice"></div>
+
+<script>
+const missions=[
+{id:1,title:"The First Message",city:"New York",desc:"Een onbekend persoon heeft een bericht gestuurd. Wat doe je?",question:"Wat is de verstandigste eerste stap?",answers:["Het bericht zorgvuldig onderzoeken","Zomaar een willekeurig antwoord sturen","Het bericht meteen verwijderen"],correct:0,reward:150},
+{id:2,title:"The Unknown File",city:"London",desc:"Een geheim dossier is gevonden in een oud kantoor.",question:"Wat onderzoek je eerst?",answers:["De herkomst van het dossier","Een willekeurige naam kiezen","Het dossier weggooien"],correct:0,reward:175},
+{id:3,title:"Tokyo Connection",city:"Tokyo",desc:"Een contactpersoon beweert informatie te hebben.",question:"Hoe controleer je de informatie?",answers:["Met meerdere betrouwbare aanwijzingen","Alles direct geloven","Het onderzoek stoppen"],correct:0,reward:200},
+{id:4,title:"Room 404",city:"Amsterdam",desc:"Een hotelkamer lijkt verbonden met een mysterieuze zaak.",question:"Wat is een goede aanpak?",answers:["De beschikbare informatie verzamelen","Zonder nadenken conclusies trekken","Alle dossiers wissen"],correct:0,reward:200},
+{id:5,title:"The Missing Employee",city:"Paris",desc:"Een medewerker van een internationaal bedrijf is verdwenen.",question:"Wat doe je als eerste?",answers:["Met getuigen spreken en feiten verzamelen","Een verhaal verzinnen","Het onderzoek negeren"],correct:0,reward:225},
+{id:6,title:"The Golden Company",city:"Cairo",desc:"Een bedrijf lijkt informatie achter te houden.",question:"Wat helpt om de waarheid te vinden?",answers:["Documenten en verklaringen vergelijken","Geruchten als feiten gebruiken","Geen vragen stellen"],correct:0,reward:250},
+{id:7,title:"Unknown Activity",city:"New York",desc:"Er zijn vreemde meldingen binnengekomen.",question:"Wat doe je met de meldingen?",answers:["Patronen en tijdstippen vergelijken","Ze allemaal negeren","Direct iemand beschuldigen"],correct:0,reward:250},
+{id:8,title:"The Dutch Contact",city:"Amsterdam",desc:"Een Nederlandse contactpersoon wil je spreken.",question:"Hoe begin je het gesprek?",answers:["Rustig vragen wat diegene weet","Meteen conclusies trekken","Het gesprek beëindigen"],correct:0,reward:275},
+{id:9,title:"After Closing",city:"London",desc:"Een mysterieus bericht verwijst naar een pretpark.",question:"Wat onderzoek je?",answers:["De aanwijzingen in het bericht","Een willekeurige attractie","Een compleet ander dossier"],correct:0,reward:275},
+{id:10,title:"The Missing Signal",city:"Worldwide",desc:"Alle aanwijzingen komen samen. Het onderzoek bereikt zijn ontknoping.",question:"Wat is de beste laatste stap?",answers:["Alle bewijzen samen controleren","Een conclusie zonder bewijs maken","Het dossier vergeten"],correct:0,reward:400}
+];
+let state={name:"Agent",xp:0,money:500,done:[],hq:1,outfit:"Klassieke detective",daily:""};
+
+function loadGame(){
+try{let s=JSON.parse(localStorage.getItem("undercoverSave"));if(s)state={...state,...s}}catch(e){}
+}
+function saveGame(){
+localStorage.setItem("undercoverSave",JSON.stringify(state));
+notify("Voortgang opgeslagen!");
+}
+function notify(message){
+let n=document.getElementById("notice");n.textContent=message;n.style.display="block";
+setTimeout(()=>n.style.display="none",2600);
+}
+function startGame(){
+let name=document.getElementById("playerName").value.trim();
+if(!name){notify("Vul eerst je detective-naam in!");return}
+state.name=name;
+loadGame();
+state.name=name;
+saveGame();
+document.getElementById("start").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+updateStats();
+renderMissions();
+}
+function updateStats(){
+document.getElementById("nameStat").textContent=state.name;
+document.getElementById("xpStat").textContent=state.xp;
+document.getElementById("moneyStat").textContent=state.money;
+let ranks=["Beginner","Junior Investigator","Professional Investigator","Senior Investigator","Elite Investigator","Legend"];
+let index=Math.min(5,Math.floor(state.xp/300));
+document.getElementById("rankStat").textContent=ranks[index];
+document.getElementById("hqStatus").textContent="Huidig niveau: "+state.hq;
+document.getElementById("outfitStatus").textContent="Huidige outfit: "+state.outfit;
+document.getElementById("achievement").textContent=state.done.length?"🏆 Eerste missie voltooid!":"Voltooi je eerste missie om je eerste prestatie te verdienen.";
+}
+function showPage(id,button){
+document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+if(button)button.classList.add("active");
+if(id==="missions")renderMissions();
+}
+function renderMissions(){
+let list=document.getElementById("missionList");list.innerHTML="";
+missions.forEach(m=>{
+let done=state.done.includes(m.id);
+let div=document.createElement("div");div.className="card";
+div.innerHTML=`<div class="mission"><div><span class="tag">${done?"VOLTOOID":"BESCHIKBAAR"}</span><h3>${m.title}</h3><p>📍 ${m.city}</p><p>${m.desc}</p></div><div><button class="secondary" ${done?"disabled":""} onclick="openMission(${m.id})">${done?"Voltooid":"Start missie"}</button></div></div>`;
+list.appendChild(div);
+});
+}
+function openMission(id){
+let m=missions.find(x=>x.id===id);if(!m)return;
+let list=document.getElementById("missionList");list.innerHTML="";
+let div=document.createElement("div");div.className="card";
+let html=`<span class="tag">ACTIEVE MISSIE</span><h2>${m.title}</h2><p>${m.desc}</p><hr><h3>${m.question}</h3>`;
+m.answers.forEach((a,i)=>html+=`<button class="choice" onclick="answerMission(${id},${i})">${String.fromCharCode(65+i)}. ${a}</button>`);
+html+=`<button class="secondary" onclick="renderMissions()">← Terug naar missies</button>`;
+div.innerHTML=html;list.appendChild(div);
+}
+function answerMission(id,answer){
+let m=missions.find(x=>x.id===id);
+if(answer!==m.correct){notify("Dat is niet de beste keuze. Probeer het nog eens!");return}
+if(state.done.includes(id))return;
+state.done.push(id);state.xp+=100;state.money+=m.reward;
+saveGame();updateStats();renderMissions();
+notify("Missie voltooid! +100 XP en +"+m.reward+" credits.");
+}
+function sendMessage(){
+let input=document.getElementById("messageInput");
+let message=input.value.trim();if(!message)return;
+let replies=document.getElementById("chatReplies");
+let p=document.createElement("p");p.textContent="Jij: "+message;replies.appendChild(p);
+let r=document.createElement("p");r.textContent="Unknown: Bedankt voor je bericht, agent. Ik zal je meer informatie sturen zodra ik iets weet.";replies.appendChild(r);
+input.value="";
+}
+function dailyReward(){
+let today=new Date().toDateString();
+if(state.daily===today){notify("Je hebt je dagelijkse beloning al opgehaald!");return}
+state.daily=today;state.money+=100;saveGame();updateStats();notify("Je hebt 100 credits ontvangen!");
+}
+function upgradeHQ(){
+if(state.money<250){notify("Je hebt niet genoeg credits.");return}
+state.money-=250;state.hq++;saveGame();updateStats();notify("Hoofdkantoor verbeterd!");
+}
+function chooseOutfit(name){state.outfit=name;saveGame();updateStats();notify("Outfit gekozen!")}
+function buyOutfit(name,price){
+if(state.money<price){notify("Je hebt niet genoeg credits.");return}
+state.money-=price;state.outfit=name;saveGame();updateStats();notify("Nieuwe outfit gekocht!");
+}
+function exportSave(){
+let data=JSON.stringify(state,null,2);
+let blob=new Blob([data],{type:"application/json"});
+let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="undercover-save.json";a.click();URL.revokeObjectURL(a.href);
+}
+function resetGame(){
+if(!confirm("Weet je zeker dat je opnieuw wilt beginnen?"))return;
+localStorage.removeItem("undercoverSave");location.reload();
+}
+loadGame();
+</script>
+</body>
+</html>
+
